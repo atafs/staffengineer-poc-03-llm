@@ -1,18 +1,22 @@
+// src/components/DocumentUpload.tsx
 import { useState } from "react";
 
 interface DocumentUploadProps {
-  onUpload: (file: File) => void;
+  setFile: (file: File | null) => void;
   isLoading: boolean;
 }
 
-function DocumentUpload({ onUpload, isLoading }: DocumentUploadProps) {
+function DocumentUpload({ setFile, isLoading }: DocumentUploadProps) {
   const [fileName, setFileName] = useState<string | null>(null);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setFileName(file.name);
-      onUpload(file);
+      setFile(file);
+    } else {
+      setFileName(null);
+      setFile(null);
     }
   };
 
@@ -35,6 +39,17 @@ function DocumentUpload({ onUpload, isLoading }: DocumentUploadProps) {
           />
         </label>
         <span className="text-black">{fileName || "No file loaded"}</span>
+        {fileName && (
+          <button
+            onClick={() => {
+              setFileName(null);
+              setFile(null);
+            }}
+            className="text-red-500 hover:text-red-700"
+          >
+            Clear
+          </button>
+        )}
       </div>
     </div>
   );
